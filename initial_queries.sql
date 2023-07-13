@@ -5,8 +5,8 @@ CREATE TABLE Reading (
     title text,
     author VARCHAR(255),
     artist VARCHAR(255),
-	last_read_chapter INT,
-    chapter_count INT,
+    last_read_volume INT,
+    volume_count INT,
     start_date DATE,
     completion_date DATE
 );
@@ -16,7 +16,7 @@ CREATE TABLE Completed (
     title text,
     author VARCHAR(255),
     artist VARCHAR(255),
-	last_read_volume INT,
+    last_read_volume INT,
     volume_count INT,
     start_date DATE,
     completion_date DATE
