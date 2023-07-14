@@ -2,21 +2,18 @@ from database import connect_to_database
 import re
 
 
-# TODO: Finish the completed table; would also like to possibly include genres etc, eventually create a gui
-# TODO: and would also like to maybe expand to anime
-
-def print_menu():
+def display_menu():
     print('* * * 📚 Manga Database 📚 * * * ')
     print('1️⃣: View Library')
     print('2️⃣: Edit Library')
     print('3️⃣: Exit')  # Stretch
 
 
-def view():  # Allows you to view what you are currently reading
+def view_library():  # Allows you to view what you are currently reading
     print('1️⃣: Currently Reading')
     print('2️⃣: Completed Library')
-    view_input = int(input("Which table would you like to view? "))
-    if view_input == 1:  # Access the currently reading tables
+    table_choice = int(input("Which table would you like to view? "))
+    if table_choice == 1:  # Access the currently reading tables
         cursor.execute("SELECT * FROM reading")
         manga_list = cursor.fetchall()
         if len(manga_list) == 0:
@@ -30,7 +27,7 @@ def view():  # Allows you to view what you are currently reading
                 print(f"Volume Count: {manga[5]}")
                 print(f"Start Date: {manga[6]}")
                 print("-------------------------------------")
-    elif view_input == 2:  # Access the completed table
+    elif table_choice == 2:  # Access the completed table
         cursor.execute("SELECT * FROM completed")
         manga_list = cursor.fetchall()
         if len(manga_list) == 0:
@@ -48,19 +45,19 @@ def view():  # Allows you to view what you are currently reading
         print("Invalid Input.")
 
 
-def edit():  # Allows the user to edit various things from a chosen table
+def edit_library():  # Allows the user to edit various things from a chosen table
     print('1️⃣: Currently Reading')
     print('2️⃣: Completed Library')
-    edit_input = int(input("Which would you like to edit? "))
-    if edit_input == 1:  # Editing the currently reading table
+    table_choice = int(input("Which would you like to edit? "))
+    if table_choice == 1:  # Editing the currently reading table
         print('1️⃣: Mark Manga as Complete')
         print('2️⃣: Add New Manga')
         print('3️⃣: Edit Manga Specifics')
         print('4️⃣: Remove Manga')
 
-        extra1_input = int(input("What would you like to do? "))
+        action_choice = int(input("What would you like to do? "))
 
-        if extra1_input == 1:  # Marking manga as complete
+        if action_choice == 1:  # Marking manga as complete
             cursor.execute("SELECT * FROM reading")  # Showing the tables
             manga_list = cursor.fetchall()
             if len(manga_list) == 0:
@@ -127,7 +124,7 @@ def edit():  # Allows the user to edit various things from a chosen table
                 else:
                     print("Manga not found in the Reading table.")
 
-        elif extra1_input == 2:  # Adding a new manga
+        elif action_choice == 2:  # Adding a new manga
             title = input("What is the name of the manga? ")
             author = input("Who is the author of " + title + "? ")
             artist = input("Is " + author + " the artist as well? (y/n) ")
@@ -151,7 +148,7 @@ def edit():  # Allows the user to edit various things from a chosen table
             conn.commit()
             print("The manga has successfully been added to the Reading table.")
 
-        elif extra1_input == 3:  # Edit a specific variable
+        elif action_choice == 3:  # Edit a specific variable
             cursor.execute("SELECT * FROM reading")  # Showing the tables
             manga_list = cursor.fetchall()
 
@@ -209,7 +206,7 @@ def edit():  # Allows the user to edit various things from a chosen table
                 else:
                     print("Manga was not found in the reading table.")
 
-        elif extra1_input == 4:  # Remove manga
+        elif action_choice == 4:  # Remove manga
             cursor.execute("SELECT * FROM reading")  # Showing the tables
             manga_list = cursor.fetchall()
 
@@ -240,15 +237,15 @@ def edit():  # Allows the user to edit various things from a chosen table
         else:
             print("Invalid Input.")
 
-    elif edit_input == 2:  # Editing the completed table
+    elif table_choice == 2:  # Editing the completed table
         print('1️⃣: Mark a Completed Title as currently reading')
         print('2️⃣: Add New Manga')
         print('3️⃣: Edit Manga Specifics')
         print('4️⃣: Remove Manga')
 
-        extra2_input = int(input("What would you like to do? "))
+        action_choice = int(input("What would you like to do? "))
 
-        if extra2_input == 1:  # Marking completed manga as reading
+        if action_choice == 1:  # Marking completed manga as reading
             cursor.execute("SELECT * FROM completed")  # Showing the tables
             manga_list = cursor.fetchall()
             if len(manga_list) == 0:
@@ -298,7 +295,7 @@ def edit():  # Allows the user to edit various things from a chosen table
             else:
                 print("Manga not found in the Completed table.")
 
-        elif extra2_input == 2:  # Adding a new manga to the completed table
+        elif action_choice == 2:  # Adding a new manga to the completed table
             title = input("What is the name of the manga? ")
             author = input("Who is the author of " + title + "? ")
             artist = input("Is " + author + " the artist as well? (y/n) ")
@@ -325,7 +322,7 @@ def edit():  # Allows the user to edit various things from a chosen table
             conn.commit()
             print("The manga has successfully been added to the completed table.")
 
-        elif extra2_input == 3:  # Edit a specific variable
+        elif action_choice == 3:  # Edit a specific variable
             cursor.execute("SELECT * FROM Completed")  # Showing the tables
             manga_list = cursor.fetchall()
 
@@ -385,7 +382,7 @@ def edit():  # Allows the user to edit various things from a chosen table
                 else:
                     print("Manga was not found in the Completed table.")
 
-        elif extra2_input == 4:  # Remove manga
+        elif action_choice == 4:  # Remove manga
             cursor.execute("SELECT * FROM completed")  # Showing the tables
             manga_list = cursor.fetchall()
 
@@ -421,15 +418,15 @@ def edit():  # Allows the user to edit various things from a chosen table
 conn, cursor = connect_to_database()
 
 while True:
-    print_menu()
+    display_menu()
     user_input = input("Select an option (1-3): ")
 
     try:
         user_input = int(user_input)
         if user_input == 1:
-            view()
+            view_library()
         elif user_input == 2:
-            edit()
+            edit_library()
         elif user_input == 3:
             print("Thank you, Goodbye!")
             cursor.close()
