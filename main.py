@@ -1,4 +1,4 @@
-import psycopg2  # Allows the use of postgresSQL queries
+from database import connect_to_database
 import re
 
 
@@ -10,14 +10,6 @@ def print_menu():
     print('1️⃣: View Library')
     print('2️⃣: Edit Library')
     print('3️⃣: Exit')  # Stretch
-
-
-conn = psycopg2.connect(database="manga_database",
-                        host="localhost",
-                        user="postgres",
-                        password="Mamita0011!!")
-
-cursor = conn.cursor()
 
 
 def view():  # Allows you to view what you are currently reading
@@ -196,13 +188,7 @@ def edit():  # Allows the user to edit various things from a chosen table
                     if field in ['title', 'author', 'artist', 'last_read_volume', 'volume_count', 'start_date']:
                         value = input(f"Enter the new value for {field}: ")
 
-                        if field == 'last_read_volume' and not value.isdigit():
-                            print("Invalid input for last_read_volume. Updating with NULL.")
-                            value = None
-                        elif field == 'volume_count' and not value.isdigit():
-                            print("Invalid input for volume_count. Updating with NULL.")
-                            value = None
-                        elif field == 'start_date' and not re.match(r"\d{4}-\d{2}-\d{2}", value):
+                        if field == 'start_date' and not re.match(r"\d{4}-\d{2}-\d{2}", value):
                             print("Invalid input for start_date. Updating with NULL.")
                             value = None
 
@@ -210,7 +196,14 @@ def edit():  # Allows the user to edit various things from a chosen table
                         cursor.execute(update_query, (value, manga_id))
                         conn.commit()
 
-                        print("The manga has successfully been update.")
+                    elif field in ['last_read_volume', 'volume_count']:
+                        value = int(input(f"Enter the new value for {field}: "))
+
+                        update_query = f"UPDATE Reading SET {field} = %s WHERE manga_id = %s"
+                        cursor.execute(update_query, (value, manga_id))
+                        conn.commit()
+
+                        print("The manga has successfully been updated.")
                     else:
                         print("Invalid Input.")
                 else:
@@ -368,15 +361,25 @@ def edit():  # Allows the user to edit various things from a chosen table
                     field = input("Enter the field you want to edit (title, author, artist, last_read_volume, "
                                   "volume_count, start_date, completion_date): ")
 
-                    if field in ['title', 'author', 'artist', 'last_read_volume', 'volume_count', 'start_date',
-                                 'completion_date']:
+                    if field in ['title', 'author', 'artist', 'last_read_volume', 'volume_count', 'start_date']:
                         value = input(f"Enter the new value for {field}: ")
+
+                        if field == 'start_date' and not re.match(r"\d{4}-\d{2}-\d{2}", value):
+                            print("Invalid input for start_date. Updating with NULL.")
+                            value = None
 
                         update_query = f"UPDATE Completed SET {field} = %s WHERE manga_id = %s"
                         cursor.execute(update_query, (value, manga_id))
                         conn.commit()
 
-                        print("The manga has successfully been update.")
+                    elif field in ['last_read_volume', 'volume_count']:
+                        value = int(input(f"Enter the new value for {field}: "))
+
+                        update_query = f"UPDATE Completed SET {field} = %s WHERE manga_id = %s"
+                        cursor.execute(update_query, (value, manga_id))
+                        conn.commit()
+
+                        print("The manga has successfully been updated.")
                     else:
                         print("Invalid Input.")
                 else:
@@ -414,6 +417,8 @@ def edit():  # Allows the user to edit various things from a chosen table
     else:
         print("Invalid Input.")
 
+
+conn, cursor = connect_to_database()
 
 while True:
     print_menu()
