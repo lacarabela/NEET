@@ -1,8 +1,6 @@
 import psycopg2  # Allows the use of postgresSQL queries
 from psycopg2 import pool
 
-min_connections = 1
-max_connections = 10
 
 connection_pool = None
 
@@ -10,7 +8,7 @@ connection_pool = None
 def create_connection_pool():
     global connection_pool
     connection_pool = psycopg2.pool.SimpleConnectionPool(
-        min_connections, max_connections,
+        minconn=1, maxconn=10,
         database="manga_database",
         host="localhost",
         user="postgres",
