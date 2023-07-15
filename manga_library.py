@@ -1,7 +1,8 @@
 import re
 
 
-def view_library(cursor):  # Allows you to view what you are currently reading
+def view_library(conn):  # Allows you to view what you are currently reading
+    cursor = conn.cursor()
     print('1️⃣: Currently Reading')
     print('2️⃣: Completed Library')
     table_choice = int(input("Which table would you like to view? "))
