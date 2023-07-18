@@ -33,7 +33,7 @@ def view_library(conn):  # Allows you to view what you are currently reading
                 print(f"Last Read Volume: {manga[4]}")
                 print(f"Volume Count: {manga[5]}")
                 print(f"Start Date: {manga[6]}")
-Ed                print(f"Completed Date: {manga[7]}")
+                print(f"Completed Date: {manga[7]}")
                 print("-------------------------------------")
     else:
         print("Invalid Input.")
