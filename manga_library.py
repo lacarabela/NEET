@@ -33,6 +33,7 @@ def view_library(conn):  # Allows you to view what you are currently reading
                 print(f"Last Read Volume: {manga[4]}")
                 print(f"Volume Count: {manga[5]}")
                 print(f"Start Date: {manga[6]}")
+Ed                print(f"Completed Date: {manga[7]}")
                 print("-------------------------------------")
     else:
         print("Invalid Input.")
@@ -123,7 +124,7 @@ def edit_library(cursor, conn):  # Allows the user to edit various things from a
             artist = input("Is " + author + " the artist as well? (y/n) ")
 
             if artist.lower() == "y":
-                artist = "NULL"
+                artist = None
             elif artist.lower() == "n":
                 artist = input("Who is the artist of " + title + "? ")
             else:

@@ -8,7 +8,8 @@ connection_pool = None
 def create_connection_pool():
     global connection_pool
     connection_pool = psycopg2.pool.SimpleConnectionPool(
-        minconn=1, maxconn=10,
+        minconn=1,
+        maxconn=10,
         database="manga_database",
         host="localhost",
         user="postgres",
