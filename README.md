@@ -1,1 +1,1 @@
-# NEET-Hub
+# NEET
