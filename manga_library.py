@@ -282,7 +282,7 @@ def edit_library(cursor, conn):  # Allows the user to edit various things from a
                 conn.commit()
 
                 delete_query = "DELETE FROM Completed WHERE manga_id = %s"
-                cursor.exceute(delete_query, (manga_id,))
+                cursor.execute(delete_query, (manga_id,))
                 conn.commit()
 
                 print("Manga has successfully been moved to the Reading table.")
